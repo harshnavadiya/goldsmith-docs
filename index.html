@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Documentation for the Goldsmith Shopify theme: setup, gold rates, product fields, price breakdowns, diamonds, sections, questions and support.">
+<title>Goldsmith Theme Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #ffffff;
+    --panel: #f3f6f8;
+    --ink: #162025;
+    --graphite: #55616a;
+    --hairline: #d9dfe3;
+    --edge: #8a959c;
+    --gold: #c9a04e;
+    --gold-deep: #7d6128;
+    --gold-wash: #f8f0dc;
+    --code-bg: #eef2f4;
+    --serif: "Source Serif 4", "Source Serif Pro", Georgia, serif;
+    --sans: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #11181c;
+      --panel: #182227;
+      --ink: #e8edf0;
+      --graphite: #a2adb4;
+      --hairline: #2a363c;
+      --edge: #5d6a71;
+      --gold: #d9b467;
+      --gold-deep: #e0c07e;
+      --gold-wash: #2a2517;
+      --code-bg: #1c272d;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #11181c;
+    --panel: #182227;
+    --ink: #e8edf0;
+    --graphite: #a2adb4;
+    --hairline: #2a363c;
+    --edge: #5d6a71;
+    --gold: #d9b467;
+    --gold-deep: #e0c07e;
+    --gold-wash: #2a2517;
+    --code-bg: #1c272d;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration-color: var(--gold); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+  a:hover { text-decoration-color: currentColor; }
+  :focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+  code {
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+    background: var(--code-bg);
+    font-family: var(--mono);
+    font-size: 0.86em;
+  }
+  .num { font-variant-numeric: lining-nums tabular-nums; }
+
+  /* Masthead */
+  .top {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 2;
+    background: var(--ground);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .top__inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 0.9rem clamp(1rem, 3vw, 2.5rem);
+  }
+  .brand { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; letter-spacing: -0.01em; text-decoration: none; }
+  .brand small { margin-left: 0.5rem; color: var(--graphite); font-family: var(--sans); font-size: 0.8125rem; letter-spacing: 0; }
+  .top__meta { color: var(--graphite); font-size: 0.8125rem; }
+  .top__meta .dot { display: inline-block; width: 0.5rem; height: 0.5rem; margin-right: 0.4rem; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px var(--gold-wash); vertical-align: 0.05em; }
+
+  /* Layout */
+  .wrap {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 2.5rem clamp(1rem, 3vw, 2.5rem) 6rem;
+  }
+  @media (min-width: 60rem) {
+    .wrap { grid-template-columns: 14.5rem minmax(0, 1fr); gap: 4rem; }
+    .toc { position: sticky; top: 5rem; align-self: start; max-height: calc(100vh - 6rem); overflow-y: auto; }
+  }
+  .toc__label { margin: 0 0 0.5rem; color: var(--graphite); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .toc ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--hairline); }
+  .toc a { display: block; padding: 0.3rem 0 0.3rem 0.9rem; margin-left: -1px; border-left: 1px solid transparent; color: var(--graphite); font-size: 0.9rem; text-decoration: none; }
+  .toc a:hover { color: var(--ink); border-left-color: var(--edge); }
+  @media (max-width: 59.99rem) {
+    .toc ol { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; border: 0; }
+    .toc a { padding: 0.2rem 0; border: 0; }
+  }
+
+  main { min-width: 0; }
+  .intro { max-width: 44rem; padding-bottom: 2rem; border-bottom: 1px solid var(--ink); }
+  h1 {
+    margin: 0 0 1rem;
+    font-family: var(--serif);
+    font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .lede { margin: 0; color: var(--graphite); font-size: 1.125rem; max-width: 60ch; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 1.25rem 0 0; padding: 0; list-style: none; font-size: 0.875rem; color: var(--graphite); }
+  .facts b { color: var(--ink); font-weight: 600; }
+
+  section { padding-top: 3rem; scroll-margin-top: 4.5rem; }
+  h2 {
+    margin: 0 0 1rem;
+    font-family: var(--serif);
+    font-size: clamp(1.625rem, 1.4rem + 0.9vw, 2.125rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  h3 { margin: 2rem 0 0.5rem; font-size: 1.0625rem; font-weight: 600; }
+  p, li { max-width: 68ch; }
+  p { margin: 0 0 1rem; }
+  ul, ol.steps { margin: 0 0 1rem; padding-left: 1.25rem; }
+  li + li { margin-top: 0.4rem; }
+  ol.steps { counter-reset: step; list-style: none; padding: 0; }
+  ol.steps > li { position: relative; padding-left: 2.5rem; }
+  ol.steps > li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.05rem;
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-variant-numeric: lining-nums;
+  }
+  .path { font-weight: 600; }
+
+  /* Tables: spec-sheet style */
+  .table { overflow-x: auto; margin: 0 0 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  th, td { padding: 0.6rem 1rem 0.6rem 0; border-bottom: 1px solid var(--hairline); text-align: left; vertical-align: top; }
+  thead th { border-bottom-color: var(--ink); color: var(--graphite); font-size: 0.8125rem; font-weight: 600; }
+  td:first-child { white-space: nowrap; }
+
+  /* The worked example: the theme's own breakdown table */
+  .breakdown { max-width: 30rem; margin: 1.5rem 0; padding: 1.25rem 1.5rem; background: var(--panel); }
+  .breakdown table { font-size: 0.9375rem; }
+  .breakdown td:last-child, .breakdown th:last-child { text-align: right; }
+  .breakdown .detail { display: block; color: var(--graphite); font-size: 0.8125rem; font-weight: 400; }
+  .breakdown tfoot th, .breakdown tfoot td { border-top: 2px solid var(--ink); border-bottom: 0; font-weight: 600; }
+  .breakdown tfoot td { font-size: 1.125rem; }
+  .breakdown caption { caption-side: bottom; padding-top: 0.75rem; color: var(--graphite); font-size: 0.8125rem; text-align: left; }
+
+  .note { margin: 1.25rem 0; padding: 1rem 1.25rem; background: var(--gold-wash); border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); }
+  .note p:last-child { margin: 0; }
+
+  dl.faq { margin: 0; }
+  dl.faq dt { margin-top: 1.5rem; font-weight: 600; }
+  dl.faq dd { margin: 0.35rem 0 0; max-width: 68ch; color: var(--ink); }
+
+  .contact { display: grid; gap: 1rem; margin: 1rem 0; padding: 1.5rem; border: 1px solid var(--ink); max-width: 40rem; }
+  .contact p { margin: 0; }
+  .muted { color: var(--graphite); }
+  footer.end { max-width: 76rem; margin: 0 auto; padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 3rem; border-top: 1px solid var(--hairline); color: var(--graphite); font-size: 0.8125rem; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top__inner">
+    <a class="brand" href="#top">Goldsmith <small>theme docs</small></a>
+    <span class="top__meta"><span class="dot" aria-hidden="true"></span>Version <span class="num">1.0.0</span></span>
+  </div>
+</header>
+
+<div class="wrap" id="top">
+  <nav class="toc" aria-label="On this page">
+    <p class="toc__label">On this page</p>
+    <ol>
+      <li><a href="#start">Getting started</a></li>
+      <li><a href="#rates">Gold rates</a></li>
+      <li><a href="#data">Product data</a></li>
+      <li><a href="#breakdown">Price breakdowns</a></li>
+      <li><a href="#diamonds">Diamonds</a></li>
+      <li><a href="#sections">Sections and templates</a></li>
+      <li><a href="#look">Colors and fonts</a></li>
+      <li><a href="#shopify">Shopify features</a></li>
+      <li><a href="#faq">Questions</a></li>
+      <li><a href="#code">Editing code</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="#releases">Release notes</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <div class="intro">
+      <h1>Set up Goldsmith</h1>
+      <p class="lede">Goldsmith is a Shopify theme for jewelers who sell by weight and by stone. Each price can show what it's made of: the gold at your rate, the stones and the making charge. Loose diamonds come with their grading report and a link to check it on the lab's own website.</p>
+      <ul class="facts">
+        <li><b>Built for</b> gold and diamond jewelry</li>
+        <li><b>Catalog</b> small to medium</li>
+        <li><b>Setup</b> theme editor and product fields, no code</li>
+      </ul>
+    </div>
+
+    <section id="start" aria-labelledby="start-h">
+      <h2 id="start-h">Getting started</h2>
+      <ol class="steps">
+        <li><b>Add the theme.</b> In <span class="path">Online Store &gt; Themes</span>, add Goldsmith, then choose <b>Customize</b>.</li>
+        <li><b>Enter your gold rates</b> in <span class="path">Theme settings &gt; Gold rates</span>. See <a href="#rates">Gold rates</a>.</li>
+        <li><b>Give each piece its gold weight and karat</b> as product fields. See <a href="#data">Product data</a>.</li>
+        <li><b>Choose your look</b> in <span class="path">Theme settings &gt; Colors</span> and <span class="path">Typography</span>.</li>
+        <li><b>Build your home page</b> from the sections listed in <a href="#sections">Sections and templates</a>.</li>
+      </ol>
+      <p class="muted">Every part that depends on your data hides itself until the data is there, so the theme looks complete from the first install.</p>
+    </section>
+
+    <section id="rates" aria-labelledby="rates-h">
+      <h2 id="rates-h">Gold rates</h2>
+      <p>In <span class="path">Theme settings &gt; Gold rates</span>, enter your rate per gram for 24k gold. Enter 22k, 18k and 14k too if you quote them separately. Left empty, each is worked out from the 24k rate by purity (22k is 22/24 of it, and so on).</p>
+      <p>Fill in <b>Rates as of</b> with the date you set them, so customers know how current they are. The date shows everywhere a rate does:</p>
+      <ul>
+        <li>the rate bar above the header;</li>
+        <li>karat links in the main menu;</li>
+        <li>the footer's gold-per-gram table;</li>
+        <li>price breakdowns, the budget calculator and the home page price example.</li>
+      </ul>
+      <div class="note"><p>The theme never changes your product prices. Prices stay what you set in the admin. If you want prices to follow a live gold rate automatically, use a pricing app; the theme works fully without one.</p></div>
+    </section>
+
+    <section id="data" aria-labelledby="data-h">
+      <h2 id="data-h">Product data</h2>
+      <p>The theme reads jewelry and diamond details from product metafields. Create them in <span class="path">Settings &gt; Custom data &gt; Products</span> with the namespaces and keys below, and the theme picks them up automatically. Already use other field names? Change the namespaces in <span class="path">Theme settings &gt; Product data</span>, or connect each detail on the diamond page to any field with <b>Connect dynamic source</b>.</p>
+
+      <h3>Jewelry (namespace <code>jewellery</code>)</h3>
+      <div class="table">
+        <table>
+          <thead><tr><th scope="col">Key</th><th scope="col">Type</th><th scope="col">What it's for</th></tr></thead>
+          <tbody>
+            <tr><td><code>gold_weight_grams</code></td><td>Decimal</td><td>Gold weight. Set it on a variant too when sizes weigh different amounts.</td></tr>
+            <tr><td><code>gold_karat</code></td><td>Integer</td><td>24, 22, 18 or 14 (any karat from 10 to 24 works).</td></tr>
+            <tr><td><code>making_charge_type</code></td><td>Single line text</td><td><code>percent</code> or <code>flat</code>.</td></tr>
+            <tr><td><code>making_charge_value</code></td><td>Decimal</td><td>The percent of the gold value, or a flat amount.</td></tr>
+            <tr><td><code>metal_colour</code></td><td>Single line text</td><td>Yellow, White, Rose or Two-tone.</td></tr>
+            <tr><td><code>diamond_carat_weight</code></td><td>Decimal</td><td>Total weight of the small stones in the piece.</td></tr>
+            <tr><td><code>diamond_grade</code></td><td>Single line text</td><td>Clarity and color of the small stones, for example <code>VS1/G</code>.</td></tr>
+            <tr><td><code>diamond_origin</code></td><td>Single line text</td><td>Natural or Lab-grown.</td></tr>
+            <tr><td><code>dimensions</code></td><td>Single line text</td><td>For example "Band 2.1 mm".</td></tr>
+            <tr><td><code>lead_time_days</code></td><td>Integer</td><td>Made-to-order lead time for this piece.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>A certified diamond (namespace <code>diamond</code>)</h3>
+      <p>Use these on a loose diamond, and on a piece of jewelry for its certified center stone.</p>
+      <div class="table">
+        <table>
+          <thead><tr><th scope="col">Key</th><th scope="col">Type</th><th scope="col">Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>carat</code></td><td>Decimal</td><td class="num">1.01</td></tr>
+            <tr><td><code>shape</code></td><td>Single line text, or a reference to an entry with a <code>name</code> field</td><td>Round</td></tr>
+            <tr><td><code>colour</code>, <code>clarity</code>, <code>cut</code></td><td>Single line text</td><td>G, VS1, Excellent</td></tr>
+            <tr><td><code>polish</code>, <code>symmetry</code>, <code>fluorescence</code></td><td>Single line text</td><td>Excellent, Excellent, None</td></tr>
+            <tr><td><code>origin</code></td><td>Single line text</td><td>Natural or Lab-grown</td></tr>
+            <tr><td><code>lab_grown_grade</code></td><td>Single line text</td><td>Premium or Standard (GIA lab-grown reports)</td></tr>
+            <tr><td><code>growth_method</code></td><td>Single line text</td><td>CVD or HPHT</td></tr>
+            <tr><td><code>measurements</code>, <code>girdle</code>, <code>culet</code></td><td>Single line text</td><td class="num">6.42–6.45 × 3.98 mm</td></tr>
+            <tr><td><code>ratio</code>, <code>table_percent</code>, <code>depth_percent</code></td><td>Decimal</td><td class="num">1.00, 56, 61.9</td></tr>
+            <tr><td><code>lab</code></td><td>Single line text, or a reference to an entry with a <code>name</code> field</td><td>GIA</td></tr>
+            <tr><td><code>report_number</code>, <code>report_date</code>, <code>inscription</code></td><td>Text, date</td><td class="num">2141438194</td></tr>
+            <tr><td><code>report_file</code></td><td>File</td><td>The report PDF</td></tr>
+            <tr><td><code>video_url</code></td><td>URL</td><td>A 360° viewer link</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="breakdown" aria-labelledby="breakdown-h">
+      <h2 id="breakdown-h">Price breakdowns</h2>
+      <p>When a piece has a gold weight and karat and you've entered gold rates, the theme shows what its price is made of:</p>
+      <ul>
+        <li><b>Gold</b> is the weight times your rate for that karat.</li>
+        <li><b>A piece with stones:</b> the making charge comes from the piece's own making charge, and the stones are the rest of the price. Customers see the stones at their price per carat, so they can compare them with loose stones.</li>
+        <li><b>A piece without stones:</b> the making charge is the rest of the price, shown as a percent of the gold value.</li>
+      </ul>
+      <div class="breakdown">
+        <table>
+          <caption>How it looks for a 14k solitaire at a $79.90/g rate. The rows always add up to the price you set.</caption>
+          <tbody>
+            <tr><th scope="row">Gold<span class="detail num">2.90 g × $79.90/g · 14k</span></th><td class="num">$231.71</td></tr>
+            <tr><th scope="row">Stones (lab-grown)<span class="detail num">0.30 ct SI1/H at $504.00/ct</span></th><td class="num">$151.20</td></tr>
+            <tr><th scope="row">Making charge<span class="detail num">12% of the gold value</span></th><td class="num">$27.81</td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row">The price you pay</th><td class="num">$410.72</td></tr></tfoot>
+        </table>
+      </div>
+      <p>If the numbers can't add up (for example, the gold alone would cost more than the price), the breakdown stays hidden rather than show figures that don't match.</p>
+      <h3>Ring sizes</h3>
+      <p>A ring (a product tagged <code>ring</code>) opens on its first available size, with a <b>Change size</b> link beside the price. To make customers choose a size before adding to cart, turn on <b>Ask for a ring size before adding to cart</b> in the product section.</p>
+    </section>
+
+    <section id="diamonds" aria-labelledby="diamonds-h">
+      <h2 id="diamonds-h">Diamonds</h2>
+      <h3>Diamond page</h3>
+      <p>Assign the <code>product.diamond</code> template to loose diamonds. It shows:</p>
+      <ul>
+        <li>the price and the price per carat;</li>
+        <li>the grading report: lab, report number with a Copy button, date and inscription;</li>
+        <li>a button that opens the report on the lab's own website;</li>
+        <li>every grade with what it means, including "Not graded" for cut on shapes labs don't grade;</li>
+        <li>the stone's photos, its 360° video (loaded only when the customer asks), or a labeled line drawing of its shape.</li>
+      </ul>
+      <h3>Report links</h3>
+      <p><span class="path">Theme settings &gt; Grading labs</span> holds each lab's report-check address. <code>{number}</code> is replaced by the stone's report number. GIA, IGI, HRD and GCAL are filled in, and you can add one more lab. A lab's name must match the stone's <code>lab</code> value, in any capitalization.</p>
+      <h3>Diamond search</h3>
+      <p>Assign the <code>collection.diamonds</code> template to a collection of loose diamonds. Customers can:</p>
+      <ul>
+        <li>filter by shape, carat, price, color, clarity, cut, lab, and natural or lab-grown;</li>
+        <li>see the filters in use as chips, and remove any of them in one tap;</li>
+        <li>compare stones by price per carat, with each stone's origin in its own column;</li>
+        <li>sort by price, price per carat, carat, color or clarity, from the Sort menu or by pressing a column heading;</li>
+        <li>share a search by its address.</li>
+      </ul>
+      <p>The search lists up to 250 stones on one page. For bigger catalogs, use the standard collection template with filters from the Shopify Search and Discovery app.</p>
+      <h3>Similar stones</h3>
+      <p>Under each diamond, the <b>Similar stones</b> section shows other stones from your diamonds collection: the same origin only, within a carat range of the stone (50% either way by default), with the same shape and closest weight first. Choose another collection or range in the section's settings. If no stone fits, the section doesn't show.</p>
+    </section>
+
+    <section id="sections" aria-labelledby="sections-h">
+      <h2 id="sections-h">Sections and templates</h2>
+      <h3>Home page</h3>
+      <div class="table">
+        <table>
+          <thead><tr><th scope="col">Section</th><th scope="col">What it does</th></tr></thead>
+          <tbody>
+            <tr><td>Hero</td><td>Headline, photos and a worked price example from one of your pieces.</td></tr>
+            <tr><td>Category tiles</td><td>Tall photo tiles linking to collections.</td></tr>
+            <tr><td>3D ring</td><td>A solitaire drawn in the browser. It stays still until the customer drags it or presses play.</td></tr>
+            <tr><td>The price, taken apart</td><td>One piece's price breakdown beside its photo, with marks tying each row to the piece.</td></tr>
+            <tr><td>Featured products</td><td>A row of pieces from one collection.</td></tr>
+            <tr><td>Featured product</td><td>One product with its buy buttons and app blocks.</td></tr>
+            <tr><td>Budget calculator</td><td>How much gold a budget buys at each karat, at your rates.</td></tr>
+            <tr><td>Photo and story</td><td>A photo beside a short story and links.</td></tr>
+            <tr><td>Promises</td><td>What customers can check for themselves, as a ruled list.</td></tr>
+            <tr><td>Email signup</td><td>Newsletter signup.</td></tr>
+            <tr><td>Custom Liquid</td><td>Your own code or an app's embed code.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Product page</h3>
+      <p>Blocks you can reorder or remove: title, vendor, price, variant picker, quantity, buy buttons, price breakdown, specifications, center stone report, description, collapsible tabs, text, Custom Liquid and app blocks.</p>
+      <p>The gallery shows images, videos, YouTube and Vimeo, and 3D models with "View in your space". Variant images switch when a variant is chosen. <b>Product recommendations</b> can show related or complementary pieces.</p>
+      <h3>Other templates</h3>
+      <p>Collection and search (with filters and sorting), all collections, blog, article, contact, cart, 404, password and gift card.</p>
+    </section>
+
+    <section id="look" aria-labelledby="look-h">
+      <h2 id="look-h">Colors and fonts</h2>
+      <p><span class="path">Theme settings &gt; Colors</span> holds four color schemes; each section picks one. The first is white with steel ink, the second a light panel, the third deep steel for a band, and the fourth a warm gold wash. Edit any of them, or add more.</p>
+      <p><span class="path">Theme settings &gt; Typography</span> sets the heading and body fonts from Shopify's font library.</p>
+      <p><span class="path">Theme settings &gt; Social media</span> takes your profile links for the icons in the footer.</p>
+    </section>
+
+    <section id="shopify" aria-labelledby="shopify-h">
+      <h2 id="shopify-h">Shopify features</h2>
+      <ul>
+        <li><b>Dynamic checkout buttons</b> on the product page and cart.</li>
+        <li><b>Shop Pay Installments</b> under the buy buttons, when your store offers it.</li>
+        <li><b>Follow on Shop</b> in the footer, when Shop Pay is on. You can hide it in the footer section.</li>
+        <li><b>Country and language selectors</b> in the header and footer, once you sell in more than one market or language.</li>
+        <li><b>Pickup availability</b> on the product page.</li>
+        <li><b>Subscriptions</b> (selling plans) on the product page and in the cart.</li>
+        <li><b>Gift cards</b> with a recipient form, and a gift card page with a QR code and Apple Wallet.</li>
+        <li><b>Unit prices</b> on the product page, product cards and cart.</li>
+        <li><b>Link previews and search results:</b> shared links show the page's title and image, and products carry Google's product details.</li>
+      </ul>
+    </section>
+
+    <section id="faq" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions</h2>
+      <dl class="faq">
+        <dt>The rate bar and price breakdowns don't appear.</dt>
+        <dd>Enter at least a 24k rate in <span class="path">Theme settings &gt; Gold rates</span>, and give the piece a gold weight and karat.</dd>
+        <dt>One piece's breakdown is hidden.</dt>
+        <dd>The gold at your rate would cost more than the piece's price, or the piece has stones but its price leaves nothing for them. Check its weight, karat and your rates.</dd>
+        <dt>Can I sell in more than one currency?</dt>
+        <dd>Yes. The country selector appears once you have more than one market. Rates and breakdowns are worked out in your store's currency and shown converted, marked "≈", with a note.</dd>
+        <dt>The report button opens the wrong page.</dt>
+        <dd>Check the lab's address in <span class="path">Theme settings &gt; Grading labs</span>. The lab's name there must match the stone's <code>lab</code> value.</dd>
+        <dt>Where do the diamond outline drawings come from?</dt>
+        <dd>The theme draws round, oval, princess, cushion, emerald, pear, marquise, radiant, asscher and heart shapes. A shape entry with an <code>icon</code> image uses that image instead.</dd>
+        <dt>What shows when someone shares a link to my store?</dt>
+        <dd>The page's title, description and image: the product's, collection's or article's own image, or your store's social sharing image from <span class="path">Online Store &gt; Preferences</span>.</dd>
+        <dt>Where's the Follow on Shop button?</dt>
+        <dd>In the footer, when Shop Pay is turned on for your store.</dd>
+        <dt>Does the theme change my prices when I change the rates?</dt>
+        <dd>No. Prices are always the ones you set. The rates explain them; a pricing app can keep prices in step with a live rate if you want that.</dd>
+      </dl>
+    </section>
+
+    <section id="code" aria-labelledby="code-h">
+      <h2 id="code-h">Editing code</h2>
+      <p>Everything in this guide is set up in the theme editor and the Shopify admin. If you edit the theme's code, <b>duplicate the theme first</b> (<span class="path">Online Store &gt; Themes &gt; ⋯ &gt; Duplicate</span>) so you can go back. Code changes aren't covered by theme support; for custom work, we suggest hiring a Shopify Partner.</p>
+    </section>
+
+    <section id="support" aria-labelledby="support-h">
+      <h2 id="support-h">Support</h2>
+      <div class="contact">
+        <p>Questions, or something not working as described? Contact us through the support form. Include your store address (for example <code>storename.myshopify.com</code>), what you expected to happen, and a screenshot if you can.</p>
+        <p><b>Support form:</b> <span class="muted">link to be added</span></p>
+        <p class="muted">We reply within two business days, and we fix theme bugs in the next update. Support covers setup questions and bugs in the theme; it doesn't include customization.</p>
+      </div>
+    </section>
+
+    <section id="releases" aria-labelledby="releases-h">
+      <h2 id="releases-h">Release notes</h2>
+      <h3><span class="num">1.0.0</span></h3>
+      <ul>
+        <li>First release: price breakdowns from your gold rates, diamond pages with report links, diamond search with price per carat, similar stones, the 3D ring, the budget calculator and the full set of Shopify features above.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<footer class="end">Goldsmith theme by Harsh Navadiya · Documentation for version <span class="num">1.0.0</span></footer>
+</body>
+</html>
